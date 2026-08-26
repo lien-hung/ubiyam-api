@@ -27,3 +27,10 @@ export interface BundleGiftRequest {
   quantity: number;
   showPrice: boolean;
 }
+
+export interface CartItem {
+  title: string;
+  image?: string;
+  price: number;
+  quantity: number;
+}
