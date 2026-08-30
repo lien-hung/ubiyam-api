@@ -4,14 +4,14 @@ import type { Product } from "../entity/Product.ts";
 export class ProductService {
   constructor(private readonly productRepository: Repository<Product>) {}
 
-  async createProduct(newProduct: Product) {
+  async create(newProduct: Product) {
     const product = this.productRepository.create(newProduct);
     await this.productRepository.save(product);
     return product;
   }
 
   async findMany(handle?: string) {
-    const queryOptions: FindManyOptions<Product> = { relations: { bundles: { freeGifts: { product: true } } } };
+    const queryOptions: FindManyOptions<Product> = { relations: { variants: true } };
 
     if (handle) {
       queryOptions.where = { handle };
@@ -22,7 +22,7 @@ export class ProductService {
   }
 
   async findOne(id: number) {
-    return await this.productRepository.findOne({ where: { id }, relations: { bundles: { freeGifts: { product: true } } } });
+    return await this.productRepository.findOne({ where: { id }, relations: { variants: true } });
   }
 
   async update(id: number, data: Partial<Product>) {

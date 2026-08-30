@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
-import { productRepository } from "../repository/index.ts";
 import type { Product } from "../entity/Product.ts";
+import { productRepository } from "../repository/index.ts";
+import type { ProductRequest } from "../types/request.ts";
 
 export class ProductController {
-  static async create(req: Request<Product>, res: Response) {
-    const data = await productRepository.createProduct(req.body);
+  static async create(req: Request<{}, {}, ProductRequest>, res: Response) {
+    const data = await productRepository.create(req.body as Product);
     return res.status(201).send(data);
   }
 
@@ -20,9 +21,8 @@ export class ProductController {
     return res.status(200).send(data);
   }
 
-  static async update(req: Request<Product>, res: Response) {
-    const id = Number(req.params.id);
-    await productRepository.update(id, req.body);
+  static async update(req: Request<{ id: number }, {}, ProductRequest>, res: Response) {
+    await productRepository.update(req.params.id, req.body);
     return res.sendStatus(204);
   }
 

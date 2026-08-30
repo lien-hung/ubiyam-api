@@ -9,24 +9,12 @@ export interface ProductRequest {
   description: string;
 }
 
-export interface BundleRequest {
-  title: string;
-  subtitle: string;
-  badgeText: string;
-  imageUrl: string;
+export type ProductVariantRequest = {
+  label: string;
+  price: number;
+  compareAtPrice?: number;
   productId: number;
-  buyQuantity: number;
-  getQuantity: number;
-}
-
-export interface BundleGiftRequest {
-  bundleId: number;
-  productId: number;
-  giftType: string;
-  text: string;
-  quantity: number;
-  showPrice: boolean;
-}
+};
 
 export interface CartItem {
   title: string;

@@ -1,7 +1,7 @@
-import "reflect-metadata";
 import bodyParser from "body-parser";
-import express from "express";
 import cors from "cors";
+import express from "express";
+import "reflect-metadata";
 import { AppDataSource } from "./config/database.ts";
 import appRouter from "./router/index.ts";
 

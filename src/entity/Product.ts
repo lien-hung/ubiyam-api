@@ -1,7 +1,6 @@
 import { Column, Entity, OneToMany, OneToOne, type Relation } from "typeorm";
 import { EntityBase } from "./EntityBase.ts";
-import { Bundle } from "./Bundle.ts";
-import { BundleGift } from "./BundleGift.ts";
+import { ProductVariant } from "./ProductVariant.ts";
 
 @Entity()
 export class Product extends EntityBase {
@@ -29,9 +28,6 @@ export class Product extends EntityBase {
   @Column("text", { nullable: true })
   description: string;
 
-  @OneToMany(() => Bundle, (bundle) => bundle.product)
-  bundles: Relation<Bundle[]>;
-
-  @OneToOne(() => BundleGift, (gift) => gift.product)
-  bundleGift: Relation<BundleGift>;
+  @OneToMany(() => ProductVariant, (variant) => variant.product)
+  variants: Relation<ProductVariant[]>;
 }
