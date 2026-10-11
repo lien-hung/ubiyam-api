@@ -17,8 +17,8 @@ export class ProductVariantService {
     return await this.productVariantRepository.find();
   }
 
-  async findOne(id: number) {
-    return await this.productVariantRepository.findOne({ where: { id } });
+  async findOne(id: number, includeProduct: boolean = false) {
+    return await this.productVariantRepository.findOne({ where: { id }, relations: { product: includeProduct } });
   }
 
   async delete(id: number) {

@@ -17,8 +17,7 @@ export type ProductVariantRequest = {
 };
 
 export interface CartItem {
-  title: string;
-  image?: string;
-  price: number;
+  productId: number;
+  variantId: number;
   quantity: number;
 }

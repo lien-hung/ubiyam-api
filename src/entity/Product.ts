@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne, type Relation } from "typeorm";
+import { Column, Entity, OneToMany, type Relation } from "typeorm";
 import { EntityBase } from "./EntityBase.ts";
 import { ProductVariant } from "./ProductVariant.ts";
 
