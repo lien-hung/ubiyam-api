@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { Product } from "../entity/Product.ts";
 import { productRepository } from "../repository/index.ts";
+import { NotFoundError } from "../types/error.ts";
 import type { ProductRequest } from "../types/request.ts";
 
 export class ProductController {
@@ -16,19 +17,37 @@ export class ProductController {
   }
 
   static async findOne(req: Request, res: Response) {
-    const id = Number(req.params.id);
-    const data = await productRepository.findOne(id);
-    return res.status(200).send(data);
+    try {
+      const id = Number(req.params.id);
+      const data = await productRepository.findOne(id);      
+      return res.status(200).send(data);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).send(error.message);
+      }
+    }
   }
 
   static async update(req: Request<{ id: number }, {}, ProductRequest>, res: Response) {
-    await productRepository.update(req.params.id, req.body);
-    return res.sendStatus(204);
+    try {
+      await productRepository.update(req.params.id, req.body);
+      return res.sendStatus(204);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).send(error.message);
+      }
+    }
   }
 
   static async delete(req: Request, res: Response) {
-    const id = Number(req.params.id);
-    await productRepository.delete(id);
-    return res.sendStatus(204);
+    try {
+      const id = Number(req.params.id);
+      await productRepository.delete(id);
+      return res.sendStatus(204);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        return res.status(404).send(error.message);
+      }
+    }
   }
 }

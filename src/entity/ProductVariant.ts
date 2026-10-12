@@ -13,6 +13,6 @@ export class ProductVariant extends EntityBase {
   @Column("decimal", { nullable: true, precision: 18, scale: 2 })
   compareAtPrice: number;
   
-  @ManyToOne(() => Product, (product) => product.variants)
+  @ManyToOne(() => Product, (product) => product.variants, { onDelete: "CASCADE" })
   product: Relation<Product>;
 }

@@ -1,5 +1,6 @@
 import type { FindManyOptions, Repository } from "typeorm";
 import type { Product } from "../entity/Product.ts";
+import { NotFoundError } from "../types/error.ts";
 
 export class ProductService {
   constructor(private readonly productRepository: Repository<Product>) {}
@@ -17,12 +18,15 @@ export class ProductService {
       queryOptions.where = { handle };
     }
 
-    const products = await this.productRepository.find(queryOptions);
-    return products;
+    return await this.productRepository.find(queryOptions);
   }
 
   async findOne(id: number) {
-    return await this.productRepository.findOne({ where: { id }, relations: { variants: true } });
+    const product = await this.productRepository.findOne({ where: { id }, relations: { variants: true } });
+    if (!product) {
+      throw new NotFoundError(`Product with ID ${id} not found`);
+    }
+    return product;
   }
 
   async update(id: number, data: Partial<Product>) {
@@ -31,7 +35,7 @@ export class ProductService {
       this.productRepository.merge(product, data);
       await this.productRepository.save(product);
     } else {
-      return { message: `Product with ID ${id} not found` };
+      throw new NotFoundError(`Product with ID ${id} not found`);
     }
   }
 
@@ -41,7 +45,7 @@ export class ProductService {
     if (product) {
       await this.productRepository.remove(product);
     } else {
-      return { message: `Product with ID ${id} not found` };
+      throw new NotFoundError(`Product with ID ${id} not found`);
     }
   }
 }

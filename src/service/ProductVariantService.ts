@@ -1,6 +1,7 @@
 import type { Repository } from "typeorm";
 import type { Product } from "../entity/Product.ts";
 import type { ProductVariant } from "../entity/ProductVariant.ts";
+import { NotFoundError } from "../types/error.ts";
 import type { ProductVariantRequest } from "../types/request.ts";
 
 export class ProductVariantService {
@@ -18,7 +19,11 @@ export class ProductVariantService {
   }
 
   async findOne(id: number, includeProduct: boolean = false) {
-    return await this.productVariantRepository.findOne({ where: { id }, relations: { product: includeProduct } });
+    const variant = await this.productVariantRepository.findOne({ where: { id }, relations: { product: includeProduct } });
+    if (!variant) {
+      throw new NotFoundError(`Product variant with ID ${id} not found`);
+    }
+    return variant;
   }
 
   async delete(id: number) {
@@ -27,7 +32,7 @@ export class ProductVariantService {
     if (variant) {
       await this.productVariantRepository.remove(variant);
     } else {
-      return { message: `Product variant with ID ${id} not found` };
+      throw new NotFoundError(`Product variant with ID ${id} not found`);
     }
   }
 }
